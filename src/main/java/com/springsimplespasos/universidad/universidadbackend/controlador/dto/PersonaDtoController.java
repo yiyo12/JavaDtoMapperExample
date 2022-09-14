@@ -1,6 +1,5 @@
 package com.springsimplespasos.universidad.universidadbackend.controlador.dto;
 
-import com.springsimplespasos.universidad.universidadbackend.modelo.dto.EmpleadoDTO;
 import com.springsimplespasos.universidad.universidadbackend.modelo.dto.PersonaDTO;
 import com.springsimplespasos.universidad.universidadbackend.modelo.entidades.Alumno;
 import com.springsimplespasos.universidad.universidadbackend.modelo.entidades.Empleado;
@@ -12,6 +11,7 @@ import com.springsimplespasos.universidad.universidadbackend.modelo.mapper.mapst
 import com.springsimplespasos.universidad.universidadbackend.servicios.contratos.PersonaDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,75 +49,55 @@ public class PersonaDtoController extends GenericDtoController<Persona, PersonaD
         Optional<Persona> oPersona = super.obtenerPorId(id);
         Persona persona;
         PersonaDTO dto = null;
+        System.out.println(this.nombre_entidad);
         if(oPersona.isEmpty()){
             return null;
         } else {
             persona = oPersona.get();
         }
-        if(persona instanceof Alumno) {
+        if(this.nombre_entidad == "Alumno" && persona instanceof Alumno) {
             dto = alumnoMapper.mapAlumno((Alumno) persona);
-        } else if (persona instanceof Profesor) {
+        } else if (this.nombre_entidad.toString() == "Profesor" && persona instanceof Profesor) {
             //aplicariamos mapper de profesor
-        } else if (persona instanceof Empleado) {
+            dto = profesorMapper.mapProfesor((Profesor) persona);
+        } else if (this.nombre_entidad.toString() == "Empleado" && persona instanceof Empleado) {
             //aplicamos el mapper de empelado
+            dto = empleadoMapper.mapEmpleado((Empleado) persona);
+
         }
         return dto;
     }
 
-    public List<EmpleadoDTO> obtenerTodoss() {
+    public List<?> obtenerTodoss() {
         List<Persona> oPersona = super.obtenerTodos();
         List<Persona> persona;
-        List<Empleado> oEmpl;
-        List<EmpleadoDTO> dto = null;
+        Empleado empleado = new Empleado();
+        Alumno alumno = new Alumno();
+        Profesor profesor = new Profesor();
+        ArrayList<Persona> d = new ArrayList<>();
         if(oPersona.isEmpty()){
             return null;
         } else {
             persona = oPersona;
-
-            dto = empleadoMapper.mapListEmpelado(oPersona);
-
         }
-        if(persona instanceof Alumno) {
-
-            //dto = alumnoMapper.mapAlumno((Alumno) persona);
-        } else if (persona instanceof Profesor) {
-            //aplicariamos mapper de profesor
-           // dto = profesorMapper.mapProfesor((Profesor) persona);
-        } else if (super.nombre_entidad == "Empleado") {
-            //aplicamos el mapper de empelado
-            for (EmpleadoDTO dta: dto){
-                System.out.println(dta.getTipoEmpleado());
-
+        if(this.nombre_entidad == "Alumno") {
+            for (Persona per: persona){
+                if (per.getClass().isInstance(alumno))
+                    d.add(per);
             }
-            //dto = empleadoMapper.mapEmpleado((Empleado) persona);
-        }
-
-        return dto;
-        //return (List<Persona>) dto;
-    }
-
-    public List<Persona> obtenerPorTipoEmpleado() {
-        List<Persona> oPersona = super.obtenerTodos();
-        List<Persona> tmp;
-        Persona persona;
-        PersonaDTO dto = null;
-        if(oPersona.isEmpty()){
-            return null;
-        } else {
-            persona = (Persona) oPersona;
-        }
-        if(persona instanceof Alumno) {
-            dto = alumnoMapper.mapAlumno((Alumno) persona);
-        } else if (persona instanceof Profesor) {
-            //aplicariamos mapper de profesor
-            dto = profesorMapper.mapProfesor((Profesor) persona);
-        } else if (persona instanceof Empleado) {
-            //aplicamos el mapper de empelado
-            dto = empleadoMapper.mapEmpleado((Empleado) persona);
-            for (Persona lst: oPersona){
+        } else if (this.nombre_entidad == "Profesor") {
+            for (Persona per: persona){
+                if (per.getClass().isInstance(profesor))
+                    d.add(per);
+            }
+        } else if (this.nombre_entidad == "Empleado") {
+            for (Persona per: persona){
+                if (per.getClass().isInstance(empleado))
+                    d.add(per);
             }
         }
-        return (List<Persona>) dto;
+
+        return d;
     }
 
 }

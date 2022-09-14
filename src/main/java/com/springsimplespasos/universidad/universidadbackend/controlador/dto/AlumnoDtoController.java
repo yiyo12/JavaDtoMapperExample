@@ -53,7 +53,7 @@ public class AlumnoDtoController extends PersonaDtoController {
     @GetMapping()
     public ResponseEntity<?> obtenerAlumnos(){
         Map<String, Object> mensaje = new HashMap<>();
-        List<Persona> dto = super.obtenerTodos();
+        List<Persona> dto = (List<Persona>) super.obtenerTodoss();
         if(dto == null) {
             mensaje.put("succes", Boolean.FALSE);
             mensaje.put("mensaje", String.format("No existe %s con ID %d", nombre_entidad));

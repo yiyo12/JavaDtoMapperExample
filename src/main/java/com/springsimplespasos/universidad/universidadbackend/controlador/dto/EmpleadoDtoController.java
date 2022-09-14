@@ -38,7 +38,7 @@ public class EmpleadoDtoController extends PersonaDtoController {
 
         if(dto == null) {
             mensaje.put("succes", Boolean.FALSE);
-            mensaje.put("mensaje", String.format("No existe %s con ID %d", "Empleados", id));
+            mensaje.put("mensaje", String.format("No existe %s con ID %d", nombre_entidad, id));
             return ResponseEntity.badRequest().body(mensaje);
         }
 
@@ -72,11 +72,8 @@ public class EmpleadoDtoController extends PersonaDtoController {
         Map<String, Object> mensaje = new HashMap<>();
         //usando generico
         //List<Persona> dto = personaCon.obtenerTodos();
-        //usando l
-        List<EmpleadoDTO> dto = super.obtenerTodoss();
-        for(EmpleadoDTO dta: dto){
+        List<?> dto =  super.obtenerTodoss();
 
-        }
         if(dto == null) {
             mensaje.put("succes", Boolean.FALSE);
             mensaje.put("mensaje", String.format("No existe %s con ID %d", "Empleados"));
