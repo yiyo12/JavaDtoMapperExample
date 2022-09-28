@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/empleado")
-@ConditionalOnProperty(prefix = "app", name = "controller.enable-dto", havingValue = "true")
+//@ConditionalOnProperty(prefix = "app", name = "controller.enable-dto", havingValue = "true")
 public class EmpleadoDtoController extends PersonaDtoController {
 
     @Autowired
